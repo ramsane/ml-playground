@@ -1,0 +1,40 @@
+header h3{
+    background-color: #011129 !important;
+}
+body{
+    padding: 1.5%;
+}
+#chart_container, #loss_container {
+    border: 1px solid rgba(235, 136, 23, 0.664);
+    border-radius: 1.5%;
+    height: 300px;
+    width : 300px;
+    overflow: hidden;
+    float:left;
+    margin-left : 10px;
+
+}
+
+#loss_container{
+    height: 150px;
+    width : 300px;
+}
+
+.modebar {
+    display: none !important;
+}
+
+/* ***************************************** */
+svg:first-child{
+    background-color: rba(228, 146, 146, 0.637) !important;
+}
+
+
+.carousel_container{
+    border: 2px solid orange;
+    padding: 2px;
+}
+/* ******** Nav CSS */
+nav {
+     background-color: #01102ac7;
+}

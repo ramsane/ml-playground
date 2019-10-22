@@ -1,0 +1,280 @@
+*{
+    font-family: 'Roboto', sans-serif;
+}
+
+body{
+    background-color: #F7F9FA;
+}
+/* **************Navigation styles************* */
+#sidenav-overlay{
+    z-index: 10;
+}
+
+nav {
+    background-color: #16333E;
+    line-height: 4rem;
+}
+nav ul a{
+    /* color: #01102a; */
+    color: white;
+    /* margin-bottom: -1%; */
+    padding: 0px 1rem;
+}
+nav ul li.active, nav ul li:hover{
+   border-bottom: 2px solid #FEB529;
+}
+nav ul li a:hover{
+    background-color: #0a1d23;
+    /* color: #17333E; */
+}
+
+nav .brand-logo{
+    position : relative;
+    left : 5%;
+}
+nav .brand-logo img{
+    width: 133px;
+}
+
+/* ************ Conainer and Btn style ****************/
+.container{
+    width: 85%;
+}
+.container .row{
+    padding: 1rem;
+    background-color: white;    
+}
+.btn{
+    background-color: #011129
+}
+.btn:hover, .btn:focus, .btn:active{
+    background-color: #13284c
+}
+
+
+
+/* ************* Param Selection styles  ************** */
+[type="checkbox"].filled-in:checked+label:after{
+    background-color: #011129;
+    border : 2px solid #011129;
+}
+
+input[type=range]+.thumb{
+    background-color: #011129;
+}
+
+/***************** In Google Chrome *********************/
+input[type=range]::-webkit-slider-thumb {
+  border: 0.5px solid #000000;
+  background: #011129;
+  margin-top: -6px;
+  cursor: pointer;
+}
+input[type=range]::-webkit-slider-runnable-track{
+    width: 100%;
+    height: 3.4px;
+    cursor: pointer;
+    border-radius: 1.5px;
+  }
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0; 
+}
+/* ********************************************************** */
+
+
+.switch label input[type=checkbox]:checked+.lever{
+    background-color: #01102a8c;
+}
+
+.switch label input[type=checkbox]:checked+.lever:after{
+ background-color: #011129
+}
+
+.dropdown-content li>a, .dropdown-content li>span{
+    color: #011129;
+}
+
+/* ******************** canvas styles  ******************** */
+.overlay{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top : 0%;
+    left : 0%;
+    background: rgba(0, 0, 0, 0.589);
+    z-index: 1000;
+}
+.canvas_contaner{
+    /* min-height: 400px; */
+    border: 2px solid aqua;
+}
+canvas{
+    background-color: white;
+}
+
+
+
+/* **************** Algo Controls styles *************** */
+#next_step, #reset_algo, #shuffle_btn{
+    background-color:transparent;
+    box-shadow: none
+}
+#next_step i, #reset_algo i, #shuffle_btn i{
+    color: #011129;
+    font-size: 2rem;
+}
+#play_button i{
+    font-size: 2.5rem;
+}
+
+#play_pause_btns i:hover{
+    background-color: #0025211a;
+}
+
+#shuffle_btn{
+    margin:0 2rem 0 -3rem;
+}
+
+#play_pause_btns {
+    text-align: center;
+    /* padding: 1rem; */
+    /* border: 1px solid #011129; */
+}
+
+#epoch_count #count{
+    font-size: 2rem;
+    font-weight: normal
+}
+
+
+
+
+
+#play_button{
+    background-color: #011129;
+}
+
+
+/* ***************************
+ Styles for Data select grid.
+*******************************/
+#grid_container{
+    /* border: 2px solid #011129; */
+    padding: 1rem;
+    max-width: 300px;
+}
+
+.data_select_grid{
+    /* border: 1px solid #011129; */
+    height: 200px;
+    max-width: 200px;
+    background-color: #00000010;
+    margin: 0px auto;
+
+}
+
+.data-item {
+    display: inline;
+}
+.data-item img {    
+    width : 64px;
+    height: 64px;
+    opacity: 0.3;
+}
+.data-item img:hover{
+    border : 1px solid #011129;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0px 0px 2px 0px
+}
+
+.data-item.selected > img{
+    border: 2px solid #011129;
+    opacity: 1;
+    box-shadow : 0px 0px 2px 0px;
+    border-radius: 5px;
+
+}
+/* ***************************************** */
+
+/* ***** Remove Input field Top - margin */
+.input-field{
+    margin: 0px;
+}
+:not(input[type="range"]):focus{
+    border-bottom: 1px solid #011129 !important;
+}
+
+/* error class for text fields.. */
+input.error{
+    border-bottom: 2px solid #FFAB91 !important;
+}
+/* ********************************************** */
+/* Styles for algo_header(ie., running algo info) */
+/* ********************************************** */
+#alg_info {
+    /* padding-top: 1rem; */
+    margin-bottom: 5px;
+}
+#alg_info div{
+}
+/* ********************************************** */
+
+
+
+/* ********************************************** 
+ Styles for Chart containers
+********************************************** */
+#chart_container, #loss_container {
+    /* border: 1px solid #011129; */
+    border-radius: 1.5%;
+    height: 350px;
+    width : 350px;
+    overflow: hidden;
+    margin : 10px;
+    
+}
+
+#loss_container{
+    height: 175px;
+    width : 300px;
+}
+
+.modebar {
+    display: none !important;
+}
+
+/* ********************************************** */
+#alg_param_info{
+    margin : 9% auto;
+    width: 100%;
+}
+#alg_param_info b{
+    font-weight : 450;
+}
+
+.weight-item{
+    margin: 10px 0;
+}
+.weight-item :first-child{
+    font-weight: 450;
+}
+
+
+/* ************* Foooter *********** */
+.page-footer{
+    background-color: #17333E;
+}
+ .row, .col{
+    /* border: 1px solid #13284c54; */
+}
+.page-footer .row{
+    background-color: #17333E;
+}
+.page-footer a{
+    color: #feb405;
+}

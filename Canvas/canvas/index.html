@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Canvas</title>
+	<link rel="stylesheet" type="text/css" href="css/materialize.min.css">
+</head>
+<body>
+
+	<canvas id ="canvas" width="750px" height="550px" style="margin:0px; border: 1px solid black"></canvas>
+
+</body>
+<script src="js/jquery.min.js"></script>
+<script src="js/materialize.min.js"></script>
+<!-- <script src="js/drawCanvas.js"></script> -->
+<script>
+	var down = false; 
+	var cluster_size = 5;
+	var rect = canvas.getBoundingClientRect();
+	var ctx = document.getElementById("canvas").getContext("2d");
+	var offset = $('#canvas').offset();
+	$('#canvas').click(function (e) {
+		getPosition(e);
+	});
+	$('#canvas').mousedown(function (e) {
+		down = true;
+	});
+	$('#canvas').mouseup(function (e) {
+		down = false;
+	});
+	$('#canvas').mousemove(function (e){
+		if (down){
+			getPosition(e);
+			delay(40);
+		}
+	});
+	var pointSize = 3;
+
+	function getPosition(event){
+	    var rect = canvas.getBoundingClientRect();
+	    var width = getClusterWidth();
+	    var x = event.clientX - rect.left;
+	    var y = event.clientY - rect.top;
+	    drawCoordinates(x,y);
+	    for (var i = 1; i <cluster_size; i++) {
+	     	var newX = x+getRandom(-width/2, width/2);
+	     	var newY = y+getRandom(-width/2, width/2);
+	     	drawCoordinates(newX, newY);
+	     }
+	}
+
+	function drawCoordinates(x,y){	
+	  	ctx.fillStyle = "blue"
+	    ctx.beginPath();
+	    ctx.arc(x, y, pointSize, 0, Math.PI * 2, true);
+	    ctx.fill();
+	}
+  
+	function delay(val) {
+		var iters = val * 1000;
+		for (var i = 0; i < iters; i++){
+			new Date().getTime();
+		}
+	}
+	function getClusterWidth(){
+		//add event to read width here
+		return 20;
+	}
+
+	//Generating random numbers
+	function getRandom(min, max) {
+	  return Math.random() * (max - min) + min;
+	}
+	
+</script>
+</html>
