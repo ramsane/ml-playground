@@ -6,20 +6,20 @@
  * along with postive and negative classes in each of them.
  X1 
  */
-function prepare_train_and_test(data){
-
-    data_matrix = math.map($.csv.toArrays(data), parseFloat);
+function prepare_train_and_test_from_grid(data){
 
     // split the train and test data from the data matrix.
-    indices = math.range(0, data_matrix.length)
+    indices = math.range(0, data.length)
+    console.log(data.length);
+    
     // take (1/3)rd points as test data.
     test_indices = math.pickRandom(indices, 100)
     train_indices = math.setDifference(indices, test_indices)
 
     
     // get the actual train and test data with indices.
-    train_data = math.subset(data_matrix, math.index(train_indices, [0,1,2]))
-    test_data  = math.subset(data_matrix, math.index(test_indices,  [0,1,2]))
+    train_data = math.subset(data, math.index(train_indices, [0,1,2]))
+    test_data  = math.subset(data, math.index(test_indices,  [0,1,2]))
 
     // store the X_1 and X_2 in the lr_train and lr_test objects.
     lr_train.X_1 = math.eval('train_data[:,1]',{train_data});
@@ -37,8 +37,21 @@ function prepare_train_and_test(data){
     // similarly saperate for test data..
     lr_test.pc = test_data.filter(val => { return val[2] == 1; });
     lr_test.nc = test_data.filter(val => { return val[2] == 0; });
-
 }
+
+
+/**
+ * 
+ * function to prepare the data from the canvas which involves
+ * custom sampling from train(pos and neg) and test(pos and neg)
+ * 
+ * @param {Array} canvas_data 
+ */
+function prepare_train_and_test_from_canvas(canvas_data){
+    console.log(canvas_data);
+    
+}
+
 
 
 /**

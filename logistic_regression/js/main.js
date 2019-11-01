@@ -63,6 +63,9 @@ $(document).ready(function(){
 
     // to show materialize select options
     $('select').material_select();
+    $('.canvas_img_container').css({
+        'background': 'url("./img/brush_128.png") center center / 50% no-repeat',
+    })
     
     // initialize sidenav
     $(function(){
@@ -82,22 +85,22 @@ $(document).ready(function(){
         Materialize.toast($toastContent, 4000, 'rounded')
     });
 
-    // display toast message on clicking the draw button
-    $("#draw_btn").click(function(){
-        Materialize.Toast.removeAll();
-        let $OKButton = $("<button class='btn-flat toast-action'>OK</button>")
-        $OKButton.bind('click',function(){
-            Materialize.Toast.removeAll();
-        });
-        let $toastContent = $('<span>With this you can draw your own dataset instead of <br>\
-            choosing from the available ones. This will be updated soon.</span>').add($OKButton);
+    // // display toast message on clicking the draw button
+    // $("#draw_btn").click(function(){
+    //     Materialize.Toast.removeAll();
+    //     let $OKButton = $("<button class='btn-flat toast-action'>OK</button>")
+    //     $OKButton.bind('click',function(){
+    //         Materialize.Toast.removeAll();
+    //     });
+    //     let $toastContent = $('<span>With this you can draw your own dataset instead of <br>\
+    //         choosing from the available ones. This will be updated soon.</span>').add($OKButton);
        
-        Materialize.toast($toastContent, 5000, 'rounded')
-    });
+    //     Materialize.toast($toastContent, 5000, 'rounded')
+    // });
 
 
     // ****************************************************************
-    //  Function to handle the dataset selection from the grid...
+    //  Function to handle the dataset selection from the preview pane
     // ****************************************************************
     
     $(".data-item").click(function(){
@@ -105,9 +108,20 @@ $(document).ready(function(){
         $(".data-item.selected").toggleClass('selected');
         // highlite the current item as selected one.
         $(this).toggleClass("selected");
-
     });
-
+    
+    $("#choose_btn").click(function(){
+        $(".data_select_grid").removeClass("hide");
+        $(".canvas_img_container").addClass("hide");
+        $(".choose_draw > a").removeClass('active')
+        $(this).addClass("active")
+    });
+    $("#draw_btn").click(function() {
+        $(".data_select_grid").addClass("hide");
+        $(".canvas_img_container").removeClass("hide");
+        $(".choose_draw > a").removeClass('active')
+        $(this).addClass("active")
+    });
 
 
     // display the batch_size value as slider is changed.
@@ -258,7 +272,8 @@ $(document).ready(function(){
         // log_reg_params.regs = regs;
         // update the reg_name in the log_reg_params..
         log_reg_params.reg = $("#choose_regs :selected").html().trim();
-
+            
+        // **************   regularization parameter(s)   *********************
         // update it in UI
         // reg_html = "---"
         // switch(regs.length){
@@ -298,20 +313,21 @@ $(document).ready(function(){
         $("#alg_param_info .reg_lambda span").html(reg_text);
 
 
-        // **************   regularization parameter(s)   *********************
         // Get the data from canvas or file and then draw the plots.
         is_canvas_plot = false;
         if(is_canvas_plot){
-            // We already have X_1 and X_2 and y we just draw the plot with these points.
+            // prepare x1, x2 and y of train and test and pc and nc to plot the graph
+            prepare_train_and_test_from_canvas(canvas_data)
             draw_plot(log_reg.chart_container, log_reg.loss_container);
         }else{
+            // prepare_train_and_test_from_canvas([1,2,3])
             // get the data from the selected file and draw the plot.
             log_reg.file_name = $(".data-item.selected").attr('path');
-            print(log_reg.file_name)
-
             $.get(log_reg.file_name, function(data){
+                // get arrays from csv data(raw string)
+                data = math.map($.csv.toArrays(data), parseFloat);
                 // It will create X_1 and X_2 and y for both train and test data.
-                prepare_train_and_test(data);
+                prepare_train_and_test_from_grid(data);
                 // Now that we have the data., plot the data and initilaize the model.
                 log_reg.chart_container = document.getElementById("chart_container");
                 log_reg.loss_container = document.getElementById("loss_container");
@@ -486,7 +502,6 @@ $(document).ready(function(){
                 }, [4])
         }
     });
-
 
     // Re initilaize the weights on clikcing the shuffle button.  *
     $("#shuffle_btn").click(function(){

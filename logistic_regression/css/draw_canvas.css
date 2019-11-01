@@ -1,0 +1,37 @@
+#train_pos:checked + label{
+    color: #1f77b4;
+}
+#train_pos:checked + label::after{
+    background-color: #1f77b4;
+}
+#train_pos:checked + label::after,
+#train_pos:checked + label::before{
+    border:2px solid #1f77b4;
+}
+
+#train_neg:checked + label{
+    color: #f59c36;
+}
+#train_neg:checked + label::after{
+    background-color: #f59c36;
+}
+#train_neg:checked + label::after,
+#train_neg:checked + label::before{
+    border:2px solid #f59c36;
+}
+
+#test_pos:checked + label{
+    color: 0068ad;
+}
+#test_pos:checked + label::after{
+    background-color: #0068ad;
+    border: 2px solid black;
+}
+
+#test_neg:checked + label{
+    color: #ff6100;
+}
+#test_neg:checked + label::after{
+    background-color: #ff6100;
+    border: 2px solid black;
+}

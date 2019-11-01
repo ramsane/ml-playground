@@ -19,56 +19,11 @@
 
     <!-- adding css to our path-->
     <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/draw_canvas.css" />
     
 </head>
 <body>
-    <!-- ----------------------------------------------------- -->
-    <!-- -------------- CANVAS TO DRAW THE DATA -------------- -->
-    <!-- ----------------------------------------------------- -->
-    <div class="overlay" style="display: block">
-        <div class="container" style="border: 2px solid orange;
-                        padding: 1rem;margin: 3% auto">
-            <div class="row canvas_contaner">
-                    
-                    <!-- Canvas that can filt ontp -->
-                    <div class="col s12 m6" >
-                        <canvas id ="canvas" width="500" height="500" 
-                        style="margin:0px; border: 1px solid black"></canvas>
-                    </div>
-                    
-                    <!-- Controls on how to draw points on canvas. -->
-                    <br/><br/><br/>
-                    
-                    <!-- sliders for cluster size and delay between drawing between each cluster -->
-                    <div class="col s12 m6">
-                        <div class="col s12 m6">
-                            <div class="col s12 range-field">
-                                <b>Points per Cluster : </b> <span class="ppc_text">5</span>
-                                <br/>
-                                <input type="range" id="ppc" min="1" max="10" value="5" />
-                            </div>
-                        </div><!-- End of cluster size slider. -->
-                        
-                        <div class="col s12 m6">
-                            <div class="col s12 range-field">
-                                    <b>Delay (ms) : </b> <span class="delay_text">40</span>
-                                    <br/>
-                                <input type="range" id="delay" min="0" max="100" value="40" />
-                            </div>
-                        </div><!-- End of Delay slider. -->
-                    </div>
-
-                    <!-- Check box for train and test points (+ve and -ve separately) -->
-                    <div class="col s12 m6">
-                        
-                    </div>
-
-            </div>
-        </div>
-        
-    </div>
-        
-
+    
     <!-- ----------------------------------------------------- -->
     <!-- --------------------------------------------------- -->
     <!-- ------ Nav nar with tabs in them. -->
@@ -89,7 +44,7 @@
                 <li><a href="#">Linear SVM</a></li>
                 <li><a href="#">Decision Trees</a></li>
                 <li><a href="#">Random Forests</a></li>
-                <li><a href="#">K -means clustering</a></li>
+                <!-- <li><a href="#">K -means clustering</a></li> -->
                 <li><a href="#"></a></li>
             </ul>
             <ul id="mobile-demo" class="side-nav">
@@ -113,6 +68,85 @@
         </nav>
     </div>
     
+        <!-- ----------------------------------------------------- -->
+    <!-- -------------- CANVAS TO DRAW THE DATA -------------- -->
+    <!-- ----------------------------------------------------- -->
+    <div class="overlay">
+        <div class="container" style="border: 2px solid orange;
+                        padding: 0rem">
+            <div class="row">
+                <!-- Canvas that can filt ontp -->
+                <div class="col s12 m12 l6 center-align" style="min-width: 300px;">
+                    <canvas id ="canvas" width="300" height="300" 
+                    style="margin:0px; border: 1px solid black"></canvas>
+                </div>
+                
+                <!-- Controls on how to draw points on canvas. -->
+    
+                <!-- sliders for cluster size and delay between drawing between each cluster -->
+                <div class="col s12 m6">
+                    <div class="range-field">
+                        <b>Points Per Click : </b> <span class="ppc_text">4</span>
+                        <input type="range" id="ppc" min="1" max="5" value="4" />
+                    </div>
+                </div><!-- End of cluster size slider. -->
+                
+                <div class="col s12 m6">
+                    <div class="range-field">
+                        <b>Delay (ms) : </b> <span class="delay_text">50</span>
+                        <input type="range" id="delay" min="50" max="200" value="50" />
+                    </div>
+                </div><!-- End of Delay slider. -->
+                
+                <!-- slider to select the radius -->
+                <div class="col s12 m6">
+                    <div class="range-field">
+                        <b>Cluster radius (px) : </b> <span class="radius_text">10</span>
+                        <br/>
+                        <input type="range" id="radius" min="5" max="25" value="10" />
+                    </div>
+                </div><!-- End of cluster radius slider. -->
+            
+                <!-- Check box for train and test points (+ve and -ve separately) -->
+                <div class="col s12 m6" style="display: flex;justify-content: space-between;
+                                                flex-wrap: wrap">
+                        <p>
+                            <input id="train_pos" class="with-gap" name="train_test_select" type="radio" checked/>   
+                            <label for="train_pos">Train(+ve)</label>
+                        </p>
+                        <p>
+                            <input id="train_neg" class="with-gap" name="train_test_select" type="radio" />  
+                            <label for="train_neg">Train(-ve)</label>
+                        </p>
+                        <p>
+                            <input id="test_pos" name="train_test_select" type="radio"/>   
+                            <label for="test_pos">Test(+ve)</label>
+                        </p>
+
+                        <p>
+                            <input id="test_neg" name="train_test_select" type="radio" />  
+                            <label for="test_neg">Test(-ve)</label>
+                        </p>
+                </div>
+                
+                <!-- Create and clear canvas buttons  -->
+                <div class="col s12" style="margin-top: 1rem;display: flex;
+                                               justify-content: space-around;">
+                        <button class=" red btn waves-effect waves-light z-depth-1"
+                                id = "canvas_clear">
+                            Clear Canvas
+                        </button>
+                        <button class=" green darken-2 btn waves-effect waves-light z-depth-1"
+                                id = "canvas_data_update">
+                            Update data
+                        </button>
+                </div> <!-- end of create data and clear canvas -->
+            </div>
+        </div>    
+    </div>
+            
+
+
     <!-- --------------------------------------------------- -->
     <!-- ------------------ Body Content ------------------- -->
     <!-- --------------------------------------------------- -->
@@ -121,15 +155,18 @@
         <form id="update_params" action="ram.html">
             <!-- Container that holds the data and parameter selection. -->
             <div class="row z-depth-1">
+                
                 <!-- ---------------------------------------------------------------- -->
                 <!-- This section contains Grid for selecting the dataset...      -->
                 <!-- ---------------------------------------------------------------- -->
-                <div class="col s12 m6 l4" id="grid_container">
+                <div class="col s12 m6 l4" id="data_preview_container">
+                    <div class=choose_draw>
+                        <a id="choose_btn" class=" waves-effect btn-flat">Choose</a>
+                        <a id="draw_btn" class="active waves-effect  btn-flat">Draw</a> 
+                    </div>
+                    
                     <!-- Grid for choosing the right dataset -->
-                    <a id="choose_btn" class="waves-effect waves-grey btn-flat">Choose</a> or 
-                    <a id="draw_btn" class="waves-effect  btn-flat">Draw</a> 
-
-                    <div class="data_select_grid ">
+                    <div class="data_select_grid hide">
                         <div class="data-item selected" path = "data_files/1_separable.csv">
                             <img src="img/data_1.png" title="fully separable"/>
                         </div>
@@ -158,8 +195,15 @@
                                 <img src="img/data_9.png" title="Noisy Spiral"/>
                         </div>
                     </div>
-
+                    
+                    <!-- Preview image for the canvas  -->
+                    <div class="canvas_img_container waves-effect tooltipped"
+                        data-position='top' data-delay='10' data-delay="10" type="submit"
+                        data-tooltip='Click to Update or generate the data'>
+                        <!-- <img id="canvasImg" alt="click to Update or "/> -->
+                    </div>
                 </div>
+
                 <!-- ---------------------------------------------------------------- -->
                 <!-- This section contains hyper parameters for the the LR algorithm  -->
                 <!-- ---------------------------------------------------------------- -->
@@ -234,7 +278,7 @@
             <div class="col s12 center-align" style="margin-bottom: 1rem">
                 <div class="col s6 offset-s3">
                     <button class="btn waves-effect waves-light tooltipped z-depth-1"
-                            data-position='top' data-delay='50' data-delay="100" type="submit"
+                            data-position='right' data-delay='10' data-delay="10" type="submit"
                             data-tooltip='It will reset all the current progress if there is any.'
                             id = "algo_update_btn">
                         Update
