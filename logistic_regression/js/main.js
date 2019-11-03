@@ -65,6 +65,8 @@ $(document).ready(function(){
     $('select').material_select();
     $('.canvas_img_container').css({
         'background': 'url("./img/brush_128.png") center center / 50% no-repeat',
+        'background-color': 'white'
+        
     })
     
     // initialize sidenav
@@ -413,7 +415,7 @@ $(document).ready(function(){
                                         "<b>Features and their weights</b>"+
                                     "<div>")
         // append the "BIAS / INTERCEPT" term to this feature weights.
-        let $parent = $("<div ></div>").addClass("bias");
+        let $parent = $("<div ></div>").addClass("bias weight-item");
         // append children to this tag.
         $("<div class='col s4'></div>").html(" INTERCEPT ").appendTo($parent);
         $("<div class='col s1'></div>").html(" : ").appendTo($parent);

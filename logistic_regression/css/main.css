@@ -8,6 +8,10 @@
 body{
     background-color: #F7F9FA;
 }
+
+input[type=range]{
+    height: 21px;
+}
 /* **************Navigation styles************* */
 nav {
     background-color: #16333E;
@@ -259,6 +263,20 @@ input.error{
     height: 175px;
     width : 300px;
 }
+
+@media only screen and (max-width: 370px) {
+    #chart_container {
+      width: 250px;
+      height: 250px;
+      margin-bottom: 2rem;
+    }
+    #loss_container{
+        width: 250px;
+    }
+    #feature_weights{
+        margin-left: 0 !important;
+    }
+  }
 
 .modebar {
     display: none !important;

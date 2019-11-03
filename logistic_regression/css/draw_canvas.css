@@ -28,7 +28,26 @@ canvas{
     margin: 1rem;
 }
 
+.overlay .canvas_container{
+    min-width: 300px;
+}
 
+@media only screen and (max-width: 420px) {
+    .overlay .container{
+        width: 85%;
+        margin-right: 2rem;
+    }
+    .overlay .canvas_container{
+        min-width: 250px;
+    }
+    .overlay #canvas {
+        height: 250px;
+        width: 250px;
+    }
+    .overlay input[type=range]{
+        width: 90%;
+    }
+  }
 
 #train_pos:checked + label{
     color: #1f77b4;

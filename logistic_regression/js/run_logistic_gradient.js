@@ -123,8 +123,9 @@ function gradient_descent(){
     }
 
     // get the weight accordingly. (ie., Resuming or Start with initial weights..)
-    let w = log_reg.w_updated ? log_reg.w_updated : log_reg.w_init;
-
+    let w = log_reg.w_updated ? log_reg.w_updated : log_reg.w_init;    
+    console.log("before: ", w);
+    
     // update the weights with gradient descent.
     let y_pred = hypothesis(sample_x, w);
     delta_w = math.evaluate("((y_pred - sample_y) * sample_x) * (1/m)",{
@@ -140,7 +141,8 @@ function gradient_descent(){
         w, l_rate, delta_w
     });
 
-
+    console.log("After: ", w);
+    
     // ***********************************************
     // handle regularization term to the weight update..
     let l1_ratio = log_reg_params.l1_ratio;
@@ -210,9 +212,6 @@ function gradient_descent(){
             });
             break;
     }
-
-
-
 
     // update the updated_weight in log_reg.w_updated.
     log_reg.w_updated = w;

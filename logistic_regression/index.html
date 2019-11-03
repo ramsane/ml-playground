@@ -18,6 +18,7 @@
     <link type="text/css" rel="stylesheet" href="../css/materialize.min.css"  media="screen,projection"/>
 
     <!-- adding css to our path-->
+    <link rel="stylesheet" href="css/normalize.css"/>
     <link rel="stylesheet" href="css/main.css" />
     <link rel="stylesheet" href="css/draw_canvas.css" />
     
@@ -32,7 +33,7 @@
             class="brand-logo left center-align">
             <img src="../img/ailogo.png"/>
         </a> 
-        <h5>Logistic Regression - ML Playground</h5>
+        <h5>Logistic Regression</h5>
     </nav>
     
     <!-- ----------------------------------------------------- -->
@@ -44,7 +45,7 @@
             <div class="row" style="padding-top:4rem">
 
                 <!-- Canvas that can filt ontp -->
-                <div class="col s12 m6  push-m3 l4 push-l1 center-align" style="min-width: 300px;">
+                <div class="col s12 m6  push-m3 l4 push-l1 center-align canvas_container">
                     <canvas id ="canvas" width="300" height="300"></canvas>
                     <br/>
                     <button class="btn waves-effect waves-dark z-depth-1"
@@ -91,7 +92,7 @@
                                 </div>
                         </div>
 
-                        <div style="margin-top: 6rem;">
+                        <div style="margin-top: 3rem;">
                             <button class=" btn waves-effect waves-blue z-depth-1"
                                 id="canvas_data_update">
                                 Update data
@@ -240,8 +241,8 @@
                 <!-- Button to update the dataset and algorithm properties. -->
             <div class="col s12 center-align" style="margin-bottom: 1rem">
                 <div class="col s6 offset-s3">
-                    <button class="btn waves-effect waves-light tooltipped z-depth-1"
-                            data-position='right' data-delay='10' data-delay="10" type="submit"
+                    <button class="btn waves-effect waves-light z-depth-1"
+                            data-position='right' data-delay='100' data-enterDelay=0  type="submit"
                             data-tooltip='It will reset all the current progress if there is any.'
                             id = "algo_update_btn">
                         Update

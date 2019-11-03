@@ -287,7 +287,7 @@ function draw_plot(chart_container, loss_container){
         showlegend: true,
         hovermode:false,
         legend: {
-            x: 0.15,
+            x: 0,
             y: 1.15,
             orientation : 'h'
           }
