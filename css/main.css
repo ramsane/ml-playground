@@ -36,5 +36,6 @@ svg:first-child{
 }
 /* ******** Nav CSS */
 nav {
-     background-color: #01102ac7;
+     /* background-color: #01102ac7; */
+     height: auto;
 }

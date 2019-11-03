@@ -1,3 +1,35 @@
+/* ******************** canvas styles  ******************** */
+.overlay{
+    width: 100%;
+    height: 100%;
+    background: #0000009f;
+    position: fixed;
+    top : 0%;
+    left : 0%;
+    z-index: 10000;
+    display: none;
+    overflow-y: auto;
+}
+canvas{
+    background-color: white;
+    border: 1px solid black;
+    margin-bottom: 1rem;
+}
+.overlay .container{
+    position: relative;
+    top:10%;
+    width: 75%;
+    max-width: 993px;
+}
+/* .overlay .row{
+    max-height: 80%;
+} */
+.overlay .col{
+    margin: 1rem;
+}
+
+
+
 #train_pos:checked + label{
     color: #1f77b4;
 }
@@ -31,7 +63,34 @@
 #test_neg:checked + label{
     color: #ff6100;
 }
+    
+/* ******************** canvas styles  ******************** */
+
 #test_neg:checked + label::after{
     background-color: #ff6100;
     border: 2px solid black;
+}
+
+.canvas_controls{
+    width: 300px;
+    height: auto;
+    margin: 0 auto;
+}
+
+
+
+
+#canvas_clear{
+    color: red;
+    background-color: white;
+}
+
+#canvas_data_update{
+    color: green;
+    background: white;
+}
+
+#overlay_close{
+    color: #011129;
+    background-color: white;
 }

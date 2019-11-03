@@ -27,122 +27,85 @@
     <!-- ----------------------------------------------------- -->
     <!-- --------------------------------------------------- -->
     <!-- ------ Nav nar with tabs in them. -->
-    <div class="navbar-fixed">
-        <nav>
-            <div class="nav-wrapper"> 
-            <a href="https://www.appliedaicourse.com/" target="_blank" class="brand-logo left">
-                <img src="../img/ailogo.png"/>
-            </a> 
-            <a href="#" data-activates="mobile-demo" class="button-collapse">
-                <i class="material-icons">menu</i>
-            </a>
-            <ul class="right hide-on-med-and-down">
-                <li><a href="#">K-NN</a></li>
-                <li><a href="#">Naive Bayes</a></li>
-                <li><a href="#">Linear Regression</a></li>
-                <li class="active"><a href="#">Logistic Regression</a></li>
-                <li><a href="#">Linear SVM</a></li>
-                <li><a href="#">Decision Trees</a></li>
-                <li><a href="#">Random Forests</a></li>
-                <!-- <li><a href="#">K -means clustering</a></li> -->
-                <li><a href="#"></a></li>
-            </ul>
-            <ul id="mobile-demo" class="side-nav">
-                <li class="no-padding">
-                <ul class="collapsible collapsible-accordion">
-                    <li class="bold"><a class="collapsible-header  waves-effect waves-teal">Dropdown 1</a>
-                    <div class="collapsible-body">
-                        <ul>
-                        <li><a href="#">Link1</a></li>
-                        <li><a href="#">link2</a></li>
-                        <li><a href="#">link3</a></li>
-                        </ul>
-                    </div>
-                    </li>
-                    <li class="bold"><a href="getting-started.html" class="waves-effect waves-teal">Normal link 1</a></li>
-                    <li class="bold"><a href="getting-started.html" class="waves-effect waves-teal">Normal link 2</a></li>
-                </ul>
-                </li>
-            </ul>
-            </div>
-        </nav>
-    </div>
+    <nav>
+        <a href="https://www.appliedaicourse.com/" target="_blank" 
+            class="brand-logo left center-align">
+            <img src="../img/ailogo.png"/>
+        </a> 
+        <h5>Logistic Regression - ML Playground</h5>
+    </nav>
     
-        <!-- ----------------------------------------------------- -->
+    <!-- ----------------------------------------------------- -->
     <!-- -------------- CANVAS TO DRAW THE DATA -------------- -->
     <!-- ----------------------------------------------------- -->
     <div class="overlay">
-        <div class="container" style="border: 2px solid orange;
-                        padding: 0rem">
-            <div class="row">
-                <!-- Canvas that can filt ontp -->
-                <div class="col s12 m12 l6 center-align" style="min-width: 300px;">
-                    <canvas id ="canvas" width="300" height="300" 
-                    style="margin:0px; border: 1px solid black"></canvas>
-                </div>
-                
-                <!-- Controls on how to draw points on canvas. -->
-    
-                <!-- sliders for cluster size and delay between drawing between each cluster -->
-                <div class="col s12 m6">
-                    <div class="range-field">
-                        <b>Points Per Click : </b> <span class="ppc_text">4</span>
-                        <input type="range" id="ppc" min="1" max="5" value="4" />
-                    </div>
-                </div><!-- End of cluster size slider. -->
-                
-                <div class="col s12 m6">
-                    <div class="range-field">
-                        <b>Delay (ms) : </b> <span class="delay_text">50</span>
-                        <input type="range" id="delay" min="50" max="200" value="50" />
-                    </div>
-                </div><!-- End of Delay slider. -->
-                
-                <!-- slider to select the radius -->
-                <div class="col s12 m6">
-                    <div class="range-field">
-                        <b>Cluster radius (px) : </b> <span class="radius_text">10</span>
-                        <br/>
-                        <input type="range" id="radius" min="5" max="25" value="10" />
-                    </div>
-                </div><!-- End of cluster radius slider. -->
+        <div class="container">
             
-                <!-- Check box for train and test points (+ve and -ve separately) -->
-                <div class="col s12 m6" style="display: flex;justify-content: space-between;
-                                                flex-wrap: wrap">
-                        <p>
-                            <input id="train_pos" class="with-gap" name="train_test_select" type="radio" checked/>   
-                            <label for="train_pos">Train(+ve)</label>
-                        </p>
-                        <p>
-                            <input id="train_neg" class="with-gap" name="train_test_select" type="radio" />  
-                            <label for="train_neg">Train(-ve)</label>
-                        </p>
-                        <p>
-                            <input id="test_pos" name="train_test_select" type="radio"/>   
-                            <label for="test_pos">Test(+ve)</label>
-                        </p>
+            <div class="row" style="padding-top:4rem">
 
-                        <p>
-                            <input id="test_neg" name="train_test_select" type="radio" />  
-                            <label for="test_neg">Test(-ve)</label>
-                        </p>
+                <!-- Canvas that can filt ontp -->
+                <div class="col s12 m6  push-m3 l4 push-l1 center-align" style="min-width: 300px;">
+                    <canvas id ="canvas" width="300" height="300"></canvas>
+                    <br/>
+                    <button class="btn waves-effect waves-dark z-depth-1"
+                            id = "canvas_clear">
+                        Clear Canvas
+                    </button>
                 </div>
-                
-                <!-- Create and clear canvas buttons  -->
-                <div class="col s12" style="margin-top: 1rem;display: flex;
-                                               justify-content: space-around;">
-                        <button class=" red btn waves-effect waves-light z-depth-1"
-                                id = "canvas_clear">
-                            Clear Canvas
-                        </button>
-                        <button class=" green darken-2 btn waves-effect waves-light z-depth-1"
-                                id = "canvas_data_update">
-                            Update data
-                        </button>
-                </div> <!-- end of create data and clear canvas -->
+
+                <!-- Controls on how to draw points on canvas. -->
+                <div class="col s12 m8 push-m2 l4 push-l2 center-align">
+                    <div class="canvas_controls left-align">
+                    <!-- sliders for cluster size and delay between drawing between each cluster -->
+                        <div class="range-field">
+                            <b>Points Per Click : </b> <span class="ppc_text">4</span>
+                            <input type="range" id="ppc" min="1" max="5" value="4" />
+                        </div>
+                        <div class="range-field">
+                            <b>Delay (ms) : </b> <span class="delay_text">50</span>
+                            <input type="range" id="delay" min="50" max="200" value="50" />
+                        </div>
+
+                        <!-- slider to select the radius -->
+                        <div class="range-field">
+                            <b>Cluster radius (px) : </b> <span class="radius_text">10</span>
+                            <br/>
+                            <input type="range" id="radius" min="5" max="25" value="10" />
+                        </div>
+
+                        <!-- Check box for train and test points (+ve and -ve separately) -->
+                        <div style="display: flex;margin: 1rem 0">
+                                <div style="border: 0px solid;">
+                                    <input id="train_pos" class="with-gap" name="train_test_select" type="radio" checked/>   
+                                    <label for="train_pos">Train(+ve)</label>
+
+                                    <input id="test_pos" name="train_test_select" type="radio"/>   
+                                    <label for="test_pos">Test(+ve)</label>
+                                </div>
+                                <div style="border: 0px solid;">
+                                    <input id="train_neg" class="with-gap" name="train_test_select" type="radio" />  
+                                    <label for="train_neg">Train(-ve)</label>
+                                        
+                                    <input id="test_neg" name="train_test_select" type="radio" />  
+                                    <label for="test_neg">Test(-ve)</label>
+                                </div>
+                        </div>
+
+                        <div style="margin-top: 6rem;">
+                            <button class=" btn waves-effect waves-blue z-depth-1"
+                                id="canvas_data_update">
+                                Update data
+                            </button>
+                            <button class="btn waves-effect waves-black z-depth-1"
+                                    id="overlay_close">
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>    
+        </div>
+          
     </div>
             
 
@@ -151,7 +114,7 @@
     <!-- ------------------ Body Content ------------------- -->
     <!-- --------------------------------------------------- -->
 
-    <div class="container" id="#main_content">
+    <div class="container" style="margin-top:4rem">
         <form id="update_params" action="ram.html">
             <!-- Container that holds the data and parameter selection. -->
             <div class="row z-depth-1">
@@ -161,12 +124,12 @@
                 <!-- ---------------------------------------------------------------- -->
                 <div class="col s12 m6 l4" id="data_preview_container">
                     <div class=choose_draw>
-                        <a id="choose_btn" class=" waves-effect btn-flat">Choose</a>
-                        <a id="draw_btn" class="active waves-effect  btn-flat">Draw</a> 
+                        <a id="choose_btn" class="active waves-effect btn-flat">Choose</a>
+                        <a id="draw_btn" class=" waves-effect  btn-flat">Draw</a> 
                     </div>
                     
                     <!-- Grid for choosing the right dataset -->
-                    <div class="data_select_grid hide">
+                    <div class="data_select_grid ">
                         <div class="data-item selected" path = "data_files/1_separable.csv">
                             <img src="img/data_1.png" title="fully separable"/>
                         </div>
@@ -197,8 +160,8 @@
                     </div>
                     
                     <!-- Preview image for the canvas  -->
-                    <div class="canvas_img_container waves-effect tooltipped"
-                        data-position='top' data-delay='10' data-delay="10" type="submit"
+                    <div class="canvas_img_container btn tooltipped hide"
+                        data-position='bottom' data-delay='10' data-delay="10" type="submit"
                         data-tooltip='Click to Update or generate the data'>
                         <!-- <img id="canvasImg" alt="click to Update or "/> -->
                     </div>
@@ -291,9 +254,9 @@
         </form>        
         
         <!-- div for pause___play__step__reset buttons -->
-        <div class="row z-depth-1 valign-wrapper" id="alg_info">
+        <div class="row z-depth-1" id="alg_info">
         
-            <div class="col l5 s12 m6" id="play_pause_btns"  >
+            <div class="col s12 m6 l4" id="play_pause_btns"  >
                 <!-- Shuffle the data and weights -->
                 <button class="btn-floating btn-small waves-effect" id = "shuffle_btn"
                 title="re-initialize weights">
@@ -316,63 +279,68 @@
 
             </div>
             
-            <div class="col s12 l3 m6" id="epoch_count" >
-                <span>Epoch :</span> <br>
+            <div class="col s12 m6 l2" id="epoch_count" >
+                <span>Epoch </span> <br>
                 <b id="count">000,000</b>
             </div>
             
-            <div class="col l4 s12 m6" id="loss_info">
-                <b style="display :block; margin-bottom: 10px">Log Loss : </b>
+            <div class="col s12 m6 l3" id="loss_info">
+                <b style="display :block; margin-bottom: 10px">Log Loss </b>
                 <span style="font-weight: 400;">Train Loss : </span>
                     <span id="train_loss"> --- </span><br>
                 <span style="font-weight: 300;">Test Loss &nbsp;&nbsp;:</span>
                     <span id="test_loss"> --- </span>
             </div>
 
-            <div class="col l4 s12 m6" id="accuracy_info">
-                <b style="display :block; margin-bottom: 10px">Accuracy : </b>
-                <span style="font-weight: 400;">Train Acc : </span>
+            <div class="col s12 m6 l3" id="accuracy_info">
+                <b style="display :block; margin-bottom: 10px">Accuracy </b>
+                <span style="font-weight: 400;">Train : </span>
                     <span id="train_acc"> --- </span><br>
-                <span style="font-weight: 300;">Test Acc &nbsp;&nbsp;:</span>
+                <span style="font-weight: 300;">Test &nbsp;&nbsp;:</span>
                     <span id="test_acc"> --- </span>
             </div>
 
         </div>
         
         <!-- Visualizations of running algorithm-->
-        <div class="row left-align" style="box-shadow:0px 0px 3px -1px">
+        <div class="row" style="box-shadow:0px 0px 3px -1px">
             
-            <div class="col s12 l4" style="width: 400px">
-                <div class="col s12" class="" >
-                    <input type="checkbox" class="filled-in" id ='disc_db' />
-                    <label for="disc_db">Discretize output</label>
-                </div>
-                <div id="chart_container">
-                    <!-- Plotly chart will be drawn inside this DIV -->
+            <div class="col s12 m12 l6 xl4 center-align">
+                <div style="width:300px;margin: 0 auto;">
+                    <div class="col s12 left-align">
+                        <input type="checkbox" class="filled-in" id ='disc_db' />
+                        <label for="disc_db">Discretize output</label>
+                    </div>
+                    <div id="chart_container">
+                        <!-- Plotly chart will be drawn inside this DIV -->
+                    </div>
                 </div>
             </div>
 
             <!-- Loss_container and algo_params information. -->
-            <div class="col s12 l3" style="width: 350px">
-                <div id="loss_container">
-                    <!-- Train and test loss will appear here.-->
-                </div>
-                <div class="row" id="alg_param_info">
-                    <div class="col s6"> <b>Learning Rate  </b></div><div class="col s1"> : </div>
-                        <div class="col s5 l_rate"><span>---</span></div>
-                    <div class="col s6"> <b> Batch SGD </b> </div><div class="col s1"> : </div>
-                        <div class="col s5 is_sgd"><span>---</span></div> 
-                    <div class="col s6"> <b>Batch Size   </b></div><div class="col s1"> : </div>
-                        <div class="col s5 bs"><span>---</span></div> 
-                    <div class="col s6"> <b>Regularization  </b></div><div class="col s1"> : </div>
-                        <div class="col s5 is_reg" ><span>---</span> </div>
-                    <div class="col s6"> <b>Reg. Param </b></div><div class="col s1"> : </div>
-                        <div class="col s5 reg_lambda"><span>---</span> </div> 
+            <div class="col s12 m6 l6 xl4" >
+                <div style="max-width: 400px;margin:0 auto;">
+                    <div id="loss_container">
+                        <!-- Train and test loss will appear here.-->
+                    </div>
+                    <div class="" id="alg_param_info">
+                        <div class="col s6"> <b>Learning Rate  </b></div><div class="col s1"> : </div>
+                            <div class="col s3 l_rate"><span>---</span></div>
+                        <div class="col s6"> <b> Batch SGD </b> </div><div class="col s1"> : </div>
+                            <div class="col s3 is_sgd"><span>---</span></div> 
+                        <div class="col s6"> <b>Batch Size   </b></div><div class="col s1"> : </div>
+                            <div class="col s3 bs"><span>---</span></div> 
+                        <div class="col s6"> <b>Regularization  </b></div><div class="col s1"> : </div>
+                            <div class="col s3 is_reg" ><span>---</span> </div>
+                        <div class="col s6"> <b>Reg. Param </b></div><div class="col s1"> : </div>
+                            <div class="col s3 reg_lambda"><span>---</span> </div> 
+                    </div>
                 </div>
             </div> 
 
             <!-- Features amd their weights.-->
-            <div class="col s12 l4" id="feature_weights">
+            <div class="col s12 m5 push-m1 l8 push-l4 xl3"
+             id="feature_weights" style="margin-top: 1rem;margin-left: 2rem;">
                 
             </div>
 

@@ -5,8 +5,8 @@
 function draw_plot(data, chart_container, loss_container){
         var data_matrix = math.map($.csv.toArrays(data), parseFloat)
         // get x and y from the data_matrix
-        var x = math.flatten(math.eval('data_matrix[:,1]',{data_matrix}));
-        var y = math.flatten(math.eval('data_matrix[:,2]',{data_matrix}));
+        var x = math.flatten(math.evaluate('data_matrix[:,1]',{data_matrix}));
+        var y = math.flatten(math.evaluate('data_matrix[:,2]',{data_matrix}));
 
         // random weights.(w_0 : intercept, w_1 : slope of line) 
         var w = [-20,  -38]

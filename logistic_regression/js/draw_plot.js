@@ -1,34 +1,41 @@
-
-
 /**
- * 
  * @param {*} data : It will saperate both train and test data
  * along with postive and negative classes in each of them.
  X1 
  */
-function prepare_train_and_test_from_grid(data){
-
-    // split the train and test data from the data matrix.
-    indices = math.range(0, data.length)
-    console.log(data.length);
+function prepare_data_and_chart_for_logistic_regression(train_data, test_data){
     
-    // take (1/3)rd points as test data.
-    test_indices = math.pickRandom(indices, 100)
-    train_indices = math.setDifference(indices, test_indices)
-
-    
-    // get the actual train and test data with indices.
-    train_data = math.subset(data, math.index(train_indices, [0,1,2]))
-    test_data  = math.subset(data, math.index(test_indices,  [0,1,2]))
-
     // store the X_1 and X_2 in the lr_train and lr_test objects.
-    lr_train.X_1 = math.eval('train_data[:,1]',{train_data});
-    lr_train.X_2 = math.eval('train_data[:,2]',{train_data});
-    lr_train.y = math.eval('train_data[:,3]',  {train_data});
+    // lr_train.X_1 = math.evaluate('train_data[:,1]',{train_data});
+    lr_train.X_1 = math.column(train_data, 0);
+    lr_train.X_2 = math.column(train_data, 1);
+    lr_train.y = math.column(train_data, 2);
 
-    lr_test.X_1 = math.eval('test_data[:,1]',{test_data});
-    lr_test.X_2 = math.eval('test_data[:,2]',{test_data});
-    lr_test.y  = math.eval('test_data[:,3]',{test_data});
+    lr_test.X_1 = math.column(test_data,0);
+    lr_test.X_2 = math.column(test_data,1);
+    lr_test.y  = math.column(test_data,2);
+
+
+    // standardize train and test with train parameters(mean and std_devialtion)
+    // find train_x1's and train_x2's mean and std
+    let [train_X1_mean, train_X2_mean] = [math.mean(lr_train.X_1), math.mean(lr_train.X_2)]    
+    let [train_X1_std, train_X2_std] = [math.std(lr_train.X_1), math.std(lr_train.X_2)]
+
+    // standardize X1 and X2 of train and test
+    lr_train.X_1 = lr_train.X_1.map(x => [(x-train_X1_mean)/train_X1_std])
+    lr_train.X_2 = lr_train.X_2.map(x => [(x-train_X2_mean)/train_X2_std])
+
+    lr_test.X_1 = lr_test.X_1.map(x => [(x-train_X1_mean)/train_X1_std])
+    lr_test.X_2 = lr_test.X_2.map(x => [(x-train_X2_mean)/train_X2_std])
+
+    // build back the train_data and test_data with this normalized data
+    train_data = math.concat(lr_train.X_1, lr_train.X_2, lr_train.y, 1)
+    // console.log(train_data);
+    
+    test_data = math.concat(lr_test.X_1, lr_test.X_2, lr_test.y, 1)
+
+    // Update the draw plot function based on the min and max of train and test
+
 
     // It will be useful to plot the graph with ease.
     // saperate positive and negative classes for the train data.
@@ -37,23 +44,8 @@ function prepare_train_and_test_from_grid(data){
     // similarly saperate for test data..
     lr_test.pc = test_data.filter(val => { return val[2] == 1; });
     lr_test.nc = test_data.filter(val => { return val[2] == 0; });
+
 }
-
-
-/**
- * 
- * function to prepare the data from the canvas which involves
- * custom sampling from train(pos and neg) and test(pos and neg)
- * 
- * @param {Array} canvas_data 
- */
-function prepare_train_and_test_from_canvas(canvas_data){
-    console.log(canvas_data);
-    
-}
-
-
-
 /**
  * function to draw the plots and return  the container variable in which the plot 
  * the data.
@@ -63,8 +55,6 @@ function prepare_train_and_test_from_canvas(canvas_data){
  * @param {*} chart_container  Dom object of plot in which we have to draw something.
  * @param {*} loss_container Dom object of loss_plot which will plot both train and 
  * test data.
- * 
- *
  */
 function draw_plot(chart_container, loss_container){
 
@@ -77,7 +67,7 @@ function draw_plot(chart_container, loss_container){
     let X2 = lr_train.X_2;
     let m = X1.length;
     
-    lr_train.X = math.eval('concat(ones([m,1]),'+log_reg_params.features.join()+')', {
+    lr_train.X = math.evaluate('concat(ones([m,1]),'+log_reg_params.features.join()+')', {
         X1,
         X2,
         m
@@ -87,7 +77,7 @@ function draw_plot(chart_container, loss_container){
     X1 = lr_test.X_1;
     X2 = lr_test.X_2;
     m = X1.length;
-    lr_test.X = math.eval('concat(ones([m,1]),'+log_reg_params.features.join()+')', {
+    lr_test.X = math.evaluate('concat(ones([m,1]),'+log_reg_params.features.join()+')', {
         X1,
         X2,
         m
@@ -100,8 +90,8 @@ function draw_plot(chart_container, loss_container){
     *********************************************************/
     train_pc = lr_train.pc
     train_pc_trace = {
-        x:math.flatten(math.eval('train_pc[:,1]',{train_pc})),
-        y:math.flatten(math.eval('train_pc[:,2]',{train_pc})),
+        x:math.flatten(math.evaluate('train_pc[:,1]',{train_pc})),
+        y:math.flatten(math.evaluate('train_pc[:,2]',{train_pc})),
         mode:'markers',
         type: 'scatter',
         name : 'Train ( +ve )',
@@ -120,8 +110,8 @@ function draw_plot(chart_container, loss_container){
     // similarly do it for test data..
     train_nc = lr_train.nc
     train_nc_trace = {
-        x:math.flatten(math.eval('train_nc[:,1]',{train_nc})),
-        y:math.flatten(math.eval('train_nc[:,2]',{train_nc})),
+        x:math.flatten(math.evaluate('train_nc[:,1]',{train_nc})),
+        y:math.flatten(math.evaluate('train_nc[:,2]',{train_nc})),
         mode:'markers',
         type: 'scatter',
         name : 'Train ( -ve )',
@@ -144,15 +134,15 @@ function draw_plot(chart_container, loss_container){
     *********************************************************/
     test_pc = lr_test.pc
     test_pc_trace = {
-        x:math.flatten(math.eval('test_pc[:,1]',{test_pc})),
-        y:math.flatten(math.eval('test_pc[:,2]',{test_pc})),
+        x:math.flatten(math.evaluate('test_pc[:,1]',{test_pc})),
+        y:math.flatten(math.evaluate('test_pc[:,2]',{test_pc})),
         mode:'markers',
         type: 'scatter',
         name : 'Test ( +ve )',
         hoverinfo : "skip",
         opacity : 1,
         marker : {
-            size : 6,
+            size : 4,
             color : 'rgb(0, 104, 173)',
             line : {
                 color : 'black',
@@ -166,15 +156,15 @@ function draw_plot(chart_container, loss_container){
     // similarly do it for test data..
     test_nc = lr_test.nc
     test_nc_trace = {
-        x:math.flatten(math.eval('test_nc[:,1]',{test_nc})),
-        y:math.flatten(math.eval('test_nc[:,2]',{test_nc})),
+        x:math.flatten(math.evaluate('test_nc[:,1]',{test_nc})),
+        y:math.flatten(math.evaluate('test_nc[:,2]',{test_nc})),
         mode:'markers',
         type: 'scatter',
         name : 'Test ( -ve )',
         hoverinfo : "skip",
         opacity : 1,
         marker : {
-            size : 6,
+            size : 4,
             color : 'rgb(255, 97, 0)',
             line : {
                 color : 'black',
@@ -188,11 +178,11 @@ function draw_plot(chart_container, loss_container){
 
 
     // get the min and  max values of 'x' and 'y' for this data
-    max_x = math.round(math.max(lr_train.X_1) + 1);
-    min_x = math.round(math.min(lr_train.X_1) - 1);
+    max_x = math.round(math.max(math.max(lr_train.X_1), math.max(lr_test.X_1)) + 1);
+    min_x = math.round(math.min(math.min(lr_train.X_1), math.min(lr_test.X_1)) - 1);
 
-    max_y = math.round(math.max(lr_train.X_2) + 1);
-    min_y = math.round(math.min(lr_train.X_2) - 1);
+    max_y = math.round(math.max(math.max(lr_train.X_2), math.max(lr_test.X_2)) + 1);
+    min_y = math.round(math.min(math.min(lr_train.X_2), math.min(lr_test.X_2)) - 1);
 
 
     // calculate step value for heat map.
@@ -211,13 +201,13 @@ function draw_plot(chart_container, loss_container){
     }
 
 
-    X1 = math.eval('xy_grid_[:,1]',{xy_grid_});
-    X2 = math.eval('xy_grid_[:,2]',{xy_grid_});
+    X1 = math.evaluate('xy_grid_[:,1]',{xy_grid_});
+    X2 = math.evaluate('xy_grid_[:,2]',{xy_grid_});
     m   = xy_grid_.length;
 
 
     // let create the features from the selected features.
-    grid.xy = math.eval('concat(ones([m,1]),'+log_reg_params.features.join()+')', {
+    grid.xy = math.evaluate('concat(ones([m,1]),'+log_reg_params.features.join()+')', {
         X1,
         X2,
         m
@@ -304,6 +294,4 @@ function draw_plot(chart_container, loss_container){
     }
 
     Plotly.newPlot(loss_container, [train_cost_line, test_cost_line], cost_layout)
-    print("adfadf");
-    // now return the plot along with the data
 }

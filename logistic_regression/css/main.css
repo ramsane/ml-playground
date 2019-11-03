@@ -9,34 +9,29 @@ body{
     background-color: #F7F9FA;
 }
 /* **************Navigation styles************* */
-#sidenav-overlay{
-    z-index: 10;
-}
-
 nav {
     background-color: #16333E;
-    line-height: 4rem;
-}
-nav ul a{
-    /* color: #01102a; */
-    color: white;
-    /* margin-bottom: -1%; */
-    padding: 0px 1rem;
-}
-nav ul li.active, nav ul li:hover{
-   border-bottom: 2px solid #FEB529;
-}
-nav ul li a:hover{
-    background-color: #0a1d23;
-    /* color: #17333E; */
+    height: 4rem;
+    text-align: center;
+    position: fixed;
+    top:0;
+    left:0;
+    z-index: 1000;
+    line-height: 1rem;
 }
 
-nav .brand-logo{
-    position : relative;
-    left : 5%;
+nav h5{
+    margin: 0;
+    line-height: 4rem;
 }
-nav .brand-logo img{
-    width: 133px;
+nav a.brand-logo{
+    position : relative;
+    left : 5rem;
+    height: 4rem;
+}
+nav a.brand-logo img{
+    height: 2rem;
+    margin: 1rem auto;
 }
 
 /* ************ Conainer and Btn style ****************/
@@ -109,22 +104,6 @@ input[type=number]::-webkit-outer-spin-button {
     color: #011129;
 }
 
-/* ******************** canvas styles  ******************** */
-.overlay{
-    width: 100%;
-    height: 100%;
-    position: relative;
-    top : 0%;
-    left : 0%;
-    background: rgba(0, 0, 0, 0.589);
-    z-index: 1000;
-}
-canvas{
-    background-color: white;
-}
-
-
-
 /* **************** Algo Controls styles *************** */
 #next_step, #reset_algo, #shuffle_btn{
     background-color:transparent;
@@ -186,7 +165,7 @@ canvas{
 }
 
 .data_select_grid, .canvas_img_container{
-    /* border: 1px solid #011129; */
+    border: 1px solid #0000002f;
     height: 250px;
     width: 250px;
     background-color: white;
@@ -194,12 +173,12 @@ canvas{
     cursor: pointer;
     display: flex;
     flex-wrap: wrap;
-    box-shadow: 0 0 4px -1px;
     margin-top: 1rem;
     padding: 1rem;
 }
 
 .canvas_img_container{
+    box-shadow: 0 0 4px -1px;
     background-repeat: no-repeat;
     background-position: center;
     -webkit-background-size: cover;
@@ -216,20 +195,20 @@ canvas{
 .data-item img {    
     width : 100%;
     height: 100%;
-    opacity: 0.2;
+    opacity: 0.5;
 }
 .data-item img:hover{
     /* border : 1px solid #011129; */
-    border-radius: 5px;
+    /* border-radius: 5px; */
     cursor: pointer;
-    /* box-shadow: 0px 0px 5px 0px */
+    box-shadow: 0px 0px 4px -1px;
     opacity: 0.9;
 }
 
 .data-item.selected > img{
     /* border: 2px solid #011129; */
     opacity: 1;
-    box-shadow: 0px 0px 4px -2px;
+    box-shadow: 0px 0px 4px -1px;
     /* border-radius: 5px; */
 
 }
@@ -253,6 +232,11 @@ input.error{
 #alg_info {
     /* padding-top: 1rem; */
     margin-bottom: 5px;
+}
+
+#alg_info > div {
+    padding: 1rem;
+    text-align: center;
 }
 /* ********************************************** */
 
@@ -283,7 +267,7 @@ input.error{
 /* ********************************************** */
 #alg_param_info{
     margin : 9% auto;
-    width: 100%;
+    /* width: 100%; */
 }
 #alg_param_info b{
     font-weight : 450;

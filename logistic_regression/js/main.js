@@ -72,6 +72,10 @@ $(document).ready(function(){
         // initialize side nav bar.
         $(".button-collapse").sideNav();
     });
+
+    // update the containers(div) for plotly js
+    log_reg.chart_container = document.getElementById("chart_container");
+    log_reg.loss_container = document.getElementById("loss_container");
     
     // display toast message for algorithms that are not implemented yet.
     $("nav li:not(.active)").click(function(){
@@ -174,12 +178,21 @@ $(document).ready(function(){
     $("#update_params").submit(function(event){
         event.preventDefault()
 
+        // If the data is from canvas, make sure it is valid.       
+        if($("#draw_btn").hasClass('active')){
+            // make sure there is atleast one sample on all types of data
+            for(let list in canvas_data){
+                if(canvas_data[list].length ==0){
+                    alert("Data should have atleast one point in each category")
+                    return
+                }
+            }
+        }
+        
         // first check for errors in the feature string.
         // get feature names from the 'written_features' text field.
         features_string = $("#written_features").val()
-        features1 = features_string.split(',').map(
-            x => x.trim()  
-        )
+        features1 = features_string.split(',').map(x => x.trim())
         features1 = features1.filter(x => x!="")
         feature_names1 = features1.map(x => x.replace('.', ''))
         // print(features1);
@@ -192,7 +205,7 @@ $(document).ready(function(){
             let X2 = [-1, 2,-1]
 
             features1.map(function(feature){
-                math.eval(feature, {X1, X2});
+                math.evaluate(feature, {X1, X2});
             });
         }catch(err){
             //  Display the toast first.
@@ -259,32 +272,9 @@ $(document).ready(function(){
         $("#alg_param_info .bs span").html(is_stochastic?batch_size:"---")
 
         // ***************** Regularization ****************
-        // regs = [];
-        // $("#choose_regs :selected").map(function(i, opt){
-        //     let opt_val = $(opt).val();
-        //     if(opt_val == 1){
-        //         regs.push("L1");
-        //     }
-        //     if(opt_val == 2 ){
-        //         regs.push("L2");
-        //     }
-        // });
-        // log_reg_params.regs = regs;
-        // update the reg_name in the log_reg_params..
         log_reg_params.reg = $("#choose_regs :selected").html().trim();
             
         // **************   regularization parameter(s)   *********************
-        // update it in UI
-        // reg_html = "---"
-        // switch(regs.length){
-        //     case 0 : reg_html = "None";
-        //         break;
-        //     case 1 : reg_html = regs[0];
-        //         break;
-        //     case 2 : reg_html = regs.join();
-        //         break;
-        // }
-        // $("#alg_param_info .is_reg span").html(reg_html);
         $("#alg_param_info .is_reg span").html(log_reg_params.reg);
 
         
@@ -301,9 +291,6 @@ $(document).ready(function(){
                 break;
         }
         // update it in the UI.
-        // $("#alg_param_info .reg_lambda span").html(
-        //     regs.length == 0?'---':log_reg_params.lambdas.join()
-        // );
         let reg_text = '---'
         if(log_reg_params.reg == 'L1' || log_reg_params.reg == 'Elastic'){
             reg_text = log_reg_params.l1_ratio;
@@ -313,12 +300,20 @@ $(document).ready(function(){
         $("#alg_param_info .reg_lambda span").html(reg_text);
 
 
-        // Get the data from canvas or file and then draw the plots.
-        is_canvas_plot = false;
-        if(is_canvas_plot){
+        // Get the data from canvas or grid and draw the plots with those data
+        if($("#draw_btn").hasClass('active')){
             // prepare x1, x2 and y of train and test and pc and nc to plot the graph
-            prepare_train_and_test_from_canvas(canvas_data)
+            // tran_data and test_data
+            train_data = [...canvas_data.train_pos, ...canvas_data.train_neg]
+            test_data = [...canvas_data.test_pos, ...canvas_data.test_neg]
+
+            // console.log(train_data.length, test_data.length)
+            // It will create X_1 and X_2 and y for both train and test data.
+            prepare_data_and_chart_for_logistic_regression(train_data, test_data);
+            // draw the data plot and cost plots(empty ones..)
             draw_plot(log_reg.chart_container, log_reg.loss_container);
+            // Now initialize the model with some random weights and update 
+            reset_algo_status(true, false);
         }else{
             // prepare_train_and_test_from_canvas([1,2,3])
             // get the data from the selected file and draw the plot.
@@ -326,19 +321,22 @@ $(document).ready(function(){
             $.get(log_reg.file_name, function(data){
                 // get arrays from csv data(raw string)
                 data = math.map($.csv.toArrays(data), parseFloat);
-                // It will create X_1 and X_2 and y for both train and test data.
-                prepare_train_and_test_from_grid(data);
-                // Now that we have the data., plot the data and initilaize the model.
-                log_reg.chart_container = document.getElementById("chart_container");
-                log_reg.loss_container = document.getElementById("loss_container");
+                // split the train and test data from the data matrix.
+                indices = math.range(0, data.length)
+                
+                // take (1/3)rd points as test data(approximately).
+                test_indices = math.pickRandom(indices, 100)
+                train_indices = math.setDifference(indices, test_indices)
+                // get the actual train and test data with indices.
+                train_data = math.subset(data, math.index(train_indices, [0,1,2]))
+                test_data  = math.subset(data, math.index(test_indices,  [0,1,2]))
 
+                // It will create X_1 and X_2 and y for both train and test data.
+                prepare_data_and_chart_for_logistic_regression(train_data, test_data);
                 // draw the data plot and cost plots(empty ones..)
                 draw_plot(log_reg.chart_container, log_reg.loss_container);
-
                 // Now initialize the model with some random weights and update 
-                // corresponding UI elements.
                 reset_algo_status(true, false);
-
             });
         }
 
@@ -347,10 +345,11 @@ $(document).ready(function(){
     // This function will call only after the 
     // entire page along with enttire scripts is loaded. 
     $(function() {
-        // $("#algo_update_btn").click()
+        $("#algo_update_btn").click()
     });
 
     // function to reset the running algorithm status (all the text and status.)
+    // based on the hyperparameters from the
     function reset_algo_status(shuffle_weights, shuffle_data){
         
         shuffle_weights = shuffle_weights == undefined ? false : shuffle_weights ;
@@ -410,9 +409,11 @@ $(document).ready(function(){
         log_reg.w_updated = undefined;
 
         // First delete the old chidren of feature_weights item
-        $("#feature_weights").html("<h6><b>Features and their weights</b></h6>")
+        $("#feature_weights").html("<div class='col s12' style='margin-bottom:1rem'>"+
+                                        "<b>Features and their weights</b>"+
+                                    "<div>")
         // append the "BIAS / INTERCEPT" term to this feature weights.
-        let $parent = $("<div><div>").addClass("col s12 weight-item").addClass("bias");
+        let $parent = $("<div ></div>").addClass("bias");
         // append children to this tag.
         $("<div class='col s4'></div>").html(" INTERCEPT ").appendTo($parent);
         $("<div class='col s1'></div>").html(" : ").appendTo($parent);

@@ -3,15 +3,13 @@
 var canprop = {
     draw : true,
     down : false,
-    // #points per cluster
-    cluster_size : 4,
-    // area to generate random points
-    cluster_radius : 20,
+    cluster_size : 4,      // #points per cluster
+    cluster_radius : 20,  // radius around which we can generate random points
     ctx : undefined,
-    delay : 50,
+    delay : 50,  // delay to generate points while dragging mouse on canvas
     stroke_style : "#1f77b4",  //train_pos 
     fill_style : "#1f77b4",  // train_pos
-    active_datatype_id: "train_pos"
+    active_datatype_id: "train_pos"  // to store data into appropriate lists
 };
 
 // stroke style and strol width for train and test
@@ -41,8 +39,12 @@ var canvas_data ={
 
 $(document).ready(function(){
 
+
     // first get the context object from the canvas
     canprop.ctx = document.getElementById("canvas").getContext("2d");
+    // move to center and filp Y 
+    canprop.ctx.transform(1,0,0,-1,canvas.width/2, canvas.height/2);
+
 
     // draw some points on clicking on the canvas.
 	$('#canvas').click(function (e) {
@@ -53,52 +55,54 @@ $(document).ready(function(){
 
     // generate random points around the given point
     function generate_points(x, y){
+
         // draw a #cluster-size points around that point
         let cluster_size = canprop.cluster_size
         let cluster_radius = canprop.cluster_radius
         let rect = canvas.getBoundingClientRect()
 
+        // draw only if it is valid
         if(isValidPoint(x, y, rect)){
-            // console.log(x, y);            
             drawCoordinates(x, y);
         }
 
         // draw some #clustersize points around the selected point
         for (let i = 1; i < cluster_size; i++) {
+            
             let newX = x+getRandom(-cluster_radius, cluster_radius);
             let newY = y+getRandom(-cluster_radius, cluster_radius);
             
             if(isValidPoint(newX, newY, rect)){
-                // console.log(newX, newY);            
                 drawCoordinates(newX, newY);
             }
         }
-        // console.log(rect);
     }
 
 
-    // make sure the point generated is well with in the boudaries 
-    function isValidPoint(x, y, rect){
-        // top and left edge
-        if(x < 0 || y < 0){
-            return false
-        }
-        // right and bottom boundaries
-        if (x>rect.width || y>rect.height){
-            return false
-        }
-        return true
+    // Function to check whether the point generated is well with in the boudaries
+    function isValidPoint(x, y, rect){  
+
+        return(-canvas.width/2+15<x && x<canvas.width/2-15 && 
+           -canvas.height/2+15<y && y<canvas.height/2-15)
+
     }
 
+
+    // **********************************************************
+    // ****** Functions to handle mouse movements over canvas ***
+    // **********************************************************
     // change the 'down' property on mouse down.
 	$('#canvas').mousedown(function (e) {
         canprop.down = true;
     });
+
+
     // revert back the 'down' property on mouse up.
 	$('#canvas').mouseup(function(e) {
 		canprop.down = false;
     });
     
+
     // draw some points while dragging on canvas with some delay.
 	$('#canvas').mousemove(function (e){
 		if ( canprop.down && canprop.draw){
@@ -111,21 +115,22 @@ $(document).ready(function(){
 		}
 	});
 
-    // It will get the position of mouse click on canvas
-    // and draw the co-ordinates.
+
+    // It will get the position of mouse click on canvas and draw the co-ordinates.
 	function getPosition(event){
         let rect = canvas.getBoundingClientRect()      
         let width = canprop.cluster_radius;
         
-	    let x = event.clientX - rect.left;
-        let y = event.clientY - rect.top;
+        // additional subtraction, cause we moved the axes to center
+	    let x = event.clientX - rect.left - canvas.width/2;
+        let y = event.clientY - rect.top - canvas.height/2;
         
-        return [x, y]
+        // Negative over y is cause we flipped y-axis
+        return [x, -y]
     }
     
 
-    // it will draw the circle on the canvas 
-    // on given co ordinates.
+    // it will draw the circle on the canvas on given co ordinates.
 	function drawCoordinates(x,y){	
         let ctx = canprop.ctx
         ctx.beginPath();
@@ -154,8 +159,6 @@ $(document).ready(function(){
 	function getRandom(min, max) {
 	  return Math.random() * (max - min) + min;
     }
-    
-
 
 
     // ****************************************************
@@ -187,9 +190,14 @@ $(document).ready(function(){
         canprop.active_datatype_id=id 
     })
 
+
+    // ****************************************************
+    // ********** Functions to handle canvas data  ********
+    // ****************************************************
+    
     $("#canvas_clear").click(()=> {
         // clear canvas
-        canprop.ctx.clearRect(0,0,canvas.width, canvas.height);
+        canprop.ctx.clearRect(-canvas.width/2,-canvas.height/2,canvas.width, canvas.height);
         
         // clear test and train data
         canvas_data.train_neg = []
@@ -200,13 +208,35 @@ $(document).ready(function(){
     });
 
     $("#canvas_data_update").click(() => {
-        // convert the canvas to an image and save it
-        let dataURL = canvas.toDataURL()
-        $('.canvas_img_container').css({
-            'background': 'url('+dataURL+') center center / 95% no-repeat',
-        })
-        // $('.canvas_img_container').css("background", "url("+dataURL+") / 90%")        
         
+        // make sure there is atleast one sample on all types of data
+        for(let list in canvas_data){
+            if(canvas_data[list].length ==0){
+                alert("Data should have atleast one point in each category")
+                return
+            }
+        }
+        // hide the overlay and update the image.
+        $(".overlay").fadeOut("fast", function(e){
+            let dataURL = canvas.toDataURL()
+            $('.canvas_img_container').css({
+                'background': 'url('+dataURL+') center center / 95% no-repeat',
+            })    
+        })
     });
 
+    $(".canvas_img_container").click(function(e){
+        $(".overlay").fadeIn("fast");
+    });
+
+    $(".overlay").click(function(e){
+        if(e.target==this){
+            $(".overlay").fadeOut("fast");
+        }
+    });
+
+    $("#overlay_close").click(function(e){
+        $(".overlay").fadeOut("fast");
+    })
+    
 });

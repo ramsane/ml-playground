@@ -4,14 +4,14 @@
 // Our hypothesis function( h(w) or output))
 function hypothesis(X, w){
     // returns the javascript array instead of matrix object.
-    wx = math.eval("X * w'", {X, w})
+    wx = math.evaluate("X * w'", {X, w})
     return sigmoid(wx)
 }
 
 
 // sigmoid function
 function sigmoid(z) {
-    let g = math.eval(`1 ./ (1 + e.^-z)`, {
+    let g = math.evaluate(`1 ./ (1 + e.^-z)`, {
       z,
     });
   
@@ -40,7 +40,7 @@ function compute_Cost(w, X, y){
     // first get the predicted values with current weights.
     h = hypothesis(X, w);
     m = y.length;
-    cost = math.eval("(1/m) * (-y'*log(h) - (1-y)'*log(1-h))",{m, y, h});
+    cost = math.evaluate("(1/m) * (-y'*log(h) - (1-y)'*log(1-h))",{m, y, h});
     
     // add Regularizer term for all weights except w_0 (ie., bias or intercept term)
     cost = math.squeeze(cost)  + regularizer_term(m, w); 
@@ -60,7 +60,7 @@ function regularizer_term(m, w){
             // add L_1 regularizer term.
             l1_ratio = log_reg_params.l1_ratio;
             l1_norm = math.norm(w) - math.abs(bias);
-            regularizer =  math.eval('(l1_ratio/m) * l1_norm',{
+            regularizer =  math.evaluate('(l1_ratio/m) * l1_norm',{
                 l1_norm, l1_ratio, m
             });
             break;
@@ -68,8 +68,8 @@ function regularizer_term(m, w){
         case 'L2':
             lambda = log_reg_params.lambda;
             // add the L2_regularizer term.
-            l2_norm_square = math.eval('w*w - bias^2',{w, bias});
-            regularizer = math.eval('(lambda/m) * l2_norm_square',{
+            l2_norm_square = math.evaluate('w*w - bias^2',{w, bias});
+            regularizer = math.evaluate('(lambda/m) * l2_norm_square',{
                 lambda, m, l2_norm_square
             });
             break;
@@ -80,13 +80,13 @@ function regularizer_term(m, w){
             l1_ratio = log_reg_params.l1_ratio;
             // add 'L1' regularizer term to the regularizer.
             l1_norm = math.norm(w) - math.abs(bias);
-            regularizer =  math.eval('(l1_ratio/m) * l1_norm',{
+            regularizer =  math.evaluate('(l1_ratio/m) * l1_norm',{
                 l1_norm, l1_ratio, m
             });
             
             // Now add 'L2' regularizer.
-            l2_norm_square = math.eval('w*w - bias^2',{w, bias});
-            regularizer += math.eval('((1-l1_ratio)/m) * l2_norm_square',{
+            l2_norm_square = math.evaluate('w*w - bias^2',{w, bias});
+            regularizer += math.evaluate('((1-l1_ratio)/m) * l2_norm_square',{
                 l1_ratio, m, l2_norm_square
             });
             break;
@@ -127,7 +127,7 @@ function gradient_descent(){
 
     // update the weights with gradient descent.
     let y_pred = hypothesis(sample_x, w);
-    delta_w = math.eval("((y_pred - sample_y) * sample_x) * (1/m)",{
+    delta_w = math.evaluate("((y_pred - sample_y) * sample_x) * (1/m)",{
         sample_x, sample_y, y_pred, m
     }).toArray();
     
@@ -136,7 +136,7 @@ function gradient_descent(){
     // l_rate = l_rate + Math.log10(log_reg.epoch_no*l_rate+1);
     // print(l_rate);
 
-    w = math.eval("w - l_rate*delta_w",{
+    w = math.evaluate("w - l_rate*delta_w",{
         w, l_rate, delta_w
     });
 
@@ -150,7 +150,7 @@ function gradient_descent(){
             // get the l1_ratio and add the regularization term.
             // remove regularization for intercept term.
             w_0 = w[0]
-            w = math.eval('w - l_rate*(l1_ratio/m)',{
+            w = math.evaluate('w - l_rate*(l1_ratio/m)',{
                 w, l1_ratio, m, l_rate
             });
             w[0] = w_0;
@@ -176,7 +176,7 @@ function gradient_descent(){
             // get lambda and do the rest.
             // remove regularization for intercept term.
             w_0 = w[0];
-            w  = math.eval('w - l_rate*(lambda/m)*w',{
+            w  = math.evaluate('w - l_rate*(lambda/m)*w',{
                 w, l_rate, lambda, m
             });
             w[0] = w_0;
@@ -186,7 +186,7 @@ function gradient_descent(){
         case 'Elastic':
             // get the l1_ratio and do the regularization.
             w_0 = w[0];
-            w = math.eval('w - l_rate*( (l1_ratio/m) - (((1-l1_ratio)/m)*w) )',{
+            w = math.evaluate('w - l_rate*( (l1_ratio/m) - (((1-l1_ratio)/m)*w) )',{
                 w, l_rate, m, l1_ratio
             });
             w[0] = w_0;
@@ -278,7 +278,7 @@ function getAccuracy(actual, pred){
     let m_total = math.size(actual)[0];
 
     // number of points that are correctly classified.
-    let m_correct = math.eval('sum(equal(actual, pred))',{
+    let m_correct = math.evaluate('sum(equal(actual, pred))',{
         actual, pred
     })
 
