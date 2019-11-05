@@ -262,30 +262,14 @@ input.error{
 #loss_container{
     height: 175px;
     width : 300px;
+    margin: 0 auto;
 }
 
-@media only screen and (max-width: 370px) {
-    #chart_container {
-      width: 250px;
-      height: 250px;
-      margin-bottom: 2rem;
-    }
-    #loss_container{
-        width: 250px;
-    }
-    #feature_weights{
-        margin-left: 0 !important;
-    }
-  }
-
-.modebar {
-    display: none !important;
-}
 
 /* ********************************************** */
 #alg_param_info{
-    margin : 9% auto;
-    /* width: 100%; */
+    margin : 12% auto;
+    /* max-width: 400px; */
 }
 #alg_param_info b{
     font-weight : 450;
@@ -311,4 +295,36 @@ input.error{
 }
 .page-footer a{
     color: #feb405;
+}
+
+@media only screen and (max-width: 370px) {
+    #chart_container {
+      width: 250px;
+      height: 250px;
+      margin-bottom: 2rem;
+    }
+    #loss_container{
+        width: 250px;
+    }
+    #feature_weights{
+        margin-left: 0 !important;
+    }
+  }
+
+.modebar {
+    display: none !important;
+}
+
+@media only screen and (max-width: 480px) and (min-width: 371px){
+    #chart_container {
+        width: 300px;
+        height: 300px;
+        margin-bottom: 2rem;
+      }
+      #loss_container{
+          width: 250px;
+      }
+      #alg_param_info{
+        max-width: 250px;
+    }
 }

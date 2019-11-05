@@ -373,7 +373,7 @@ $(document).ready(function(){
         // shuffle initial weights also if asked to.
         if(shuffle_weights){
             log_reg.w_init = math.zeros([lr_train.X.size()[1]]).map(x =>
-                (Math.random() * 2) - 1 // between -1 and 1
+                math.round((Math.random() * 2) - 1, 5) // between -1 and 1
             );
         }
 
